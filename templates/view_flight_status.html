@@ -1,0 +1,76 @@
+<html>
+<head>
+</head>
+<body>
+
+<form action="/view_flight_status" method="POST">
+    <p></p>
+    
+    View flight status:<br/>
+    
+    Departure Date : <input type="date" name = "Ddate" placeholder="yyyy-mm-dd" />
+    Arrival Date : <input type="date" name = "Adate" placeholder="yyyy-mm-dd" />
+    Airline: <select name= 'airline' class="selectpicker form-control" >
+        {% for airline in airline_list %}
+        <option value= "{{airline}}" SELECTED>{{airline}}</option>"
+        {% endfor %}
+        </select> </br>
+    Flight Number: <select name= 'flight_number' class="selectpicker form-control" >
+        {% for flight_num in flight_num_list %}
+        <option value= "{{flight_num}}" SELECTED>{{flight_num}}</option>"
+        {% endfor %}
+        </select> </br>
+    <p></p>
+    <input type="submit" value = Search />
+
+</form>
+
+
+<style type="text/css">
+    table, th, td{
+        border: 1px solid black;
+    }
+</style>
+
+</br>
+{% if oneway==True %}
+    One-way results:
+    <table>
+        
+        <th>Airline</th>
+        <th>Flight Number</th>
+        <th>Plane ID</th>
+        <th>Departure Date</th>
+        <th>Departure Airport</th>
+        <th>Departure City</th>
+        <th>Arrival Date</th>
+        <th>Arrival Airport</th>
+        <th>Arrival City</th>
+        <th>Flight Status</th>
+    {% if flights != None %}
+        {% for line in flights %}
+            <tr>
+                
+                <td>{{line['airline']}}</td>
+                <td>{{line['flight_number']}}</td>
+                <td>{{line['plane_ID']}}</td>
+                <td>{{line['departure_date_time']}}</td>
+                <td>{{line['departure_airport']}}</td>
+                <td>{{line['city']}}</td>
+                <td>{{line['arrival_date_time']}}</td>
+                <td>{{line['arrival_airport']}}</td>
+                <td>{{line['a2.city']}}</td>
+                <td>{{line['status']}}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+{% endif %}
+<p></p>
+<p></p>
+<a href="/visitor">Go Back</a>
+
+</body>
+
+
+</html>

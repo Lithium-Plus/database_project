@@ -1,0 +1,136 @@
+<html>
+<head>
+</head>
+<body>
+<!-- <form name="form1" action="/customer/searchflights"  method="POST">
+	<h1>What flights do you want to search for?</h1>
+	<select name="tripType" onchange="this.form.submit();" >
+		<option value="default" >Select One Option</option>
+		<option value="oneway" >One Way</option>
+		<option value="roundtrip">Round Trip</option>
+	</select>
+</form> -->
+<form action="/customer/searchflights" method="POST">
+	<p></p>
+	One-way?<br/>
+	Searching for one-way trips:<br/>
+	Departure Date Range: <input type="date" name = "DstartDate1" placeholder="yyyy-mm-dd" /> - <input type="date" name = "DendDate1" placeholder="yyyy-mm-dd" /> </br>
+	Departure City: <input type="text" name = "Dcity1" placeholder="departure city" /> </br>
+	Arrival City: <input type="text" name = "Acity1" placeholder="arrival city" /> </br>
+	<p></p>
+	Round trips?</br>
+	Searching for round trips:<br/>
+	Leaving Date Range: <input type="date" name = "LstartDate" placeholder="yyyy-mm-dd" /> - <input type="date" name = "LendDate" placeholder="yyyy-mm-dd" /> </br>
+	Departure City: <input type="text" name = "Dcity" placeholder="departure city" /> </br>
+	Arrival City: <input type="text" name = "Acity" placeholder="arrival city" /> </br>
+	Returning Date Range: <input type="date" name = "RstartDate" placeholder="yyyy-mm-dd" /> - <input type="date" name = "RendDate" placeholder="yyyy-mm-dd" /> </br>
+	<input type="submit" value = Search />
+
+</form>
+
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+</br>
+{% if oneway==True %}
+	One-way results:
+	<table>
+		<th>Airline</th>
+		<th>Flight Number</th>
+		<th>Plane ID</th>
+		<th>Departure Date</th>
+		<th>Departure Airport</th>
+		<th>Departure City</th>
+		<th>Arrival Date</th>
+		<th>Arrival Airport</th>
+		<th>Arrival City</th>
+
+	{% if flights != None %}
+		{% for line in flights %}
+			<tr>
+				<td>{{line['airline']}}</td>
+				<td>{{line['flight_number']}}</td>
+				<td>{{line['plane_ID']}}</td>
+				<td>{{line['departure_date_time']}}</td>
+				<td>{{line['departure_airport']}}</td>
+				<td>{{line['city']}}</td>
+				<td>{{line['arrival_date_time']}}</td>
+				<td>{{line['arrival_airport']}}</td>
+				<td>{{line['a2.city']}}</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+</table>
+{% endif %}
+<p></p>
+{% if oneway==False %}
+	Round trip (leaving) results:
+	<table>
+		<th>Airline</th>
+		<th>Flight Number</th>
+		<th>Plane ID</th>
+		<th>Departure Date</th>
+		<th>Departure Airport</th>
+		<th>Departure City</th>
+		<th>Arrival Date</th>
+		<th>Arrival Airport</th>
+		<th>Arrival City</th>
+
+	{% if flights != None %}
+		{% for line in Lflights %}
+			<tr>
+				<td>{{line['airline']}}</td>
+				<td>{{line['flight_number']}}</td>
+				<td>{{line['plane_ID']}}</td>
+				<td>{{line['departure_date_time']}}</td>
+				<td>{{line['departure_airport']}}</td>
+				<td>{{line['city']}}</td>
+				<td>{{line['arrival_date_time']}}</td>
+				<td>{{line['arrival_airport']}}</td>
+				<td>{{line['a2.city']}}</td>
+
+			</tr>
+		{% endfor %}
+	{% endif %}
+	</table>
+	Round trip (Returning) results:
+	<table>
+		<th>Airline</th>
+		<th>Flight Number</th>
+		<th>Plane ID</th>
+		<th>Departure Date</th>
+		<th>Departure Airport</th>
+		<th>Departure City</th>
+		<th>Arrival Date</th>
+		<th>Arrival Airport</th>
+		<th>Arrival City</th>
+
+	{% if flights != None %}
+		{% for line in Rflights %}
+			<tr>
+				<td>{{line['airline']}}</td>
+				<td>{{line['flight_number']}}</td>
+				<td>{{line['plane_ID']}}</td>
+				<td>{{line['departure_date_time']}}</td>
+				<td>{{line['departure_airport']}}</td>
+				<td>{{line['city']}}</td>
+				<td>{{line['arrival_date_time']}}</td>
+				<td>{{line['arrival_airport']}}</td>
+				<td>{{line['a2.city']}}</td>
+
+			</tr>
+		{% endfor %}
+	{% endif %}
+	</table>
+{% endif %}
+<p></p>
+<a href="/customer">Go Back</a>
+
+</body>
+
+
+</html>
