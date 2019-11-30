@@ -1,0 +1,45 @@
+<html>
+<head>
+</head>
+<body onload="GetDateTime();">
+		
+<form action="/customer/purchase" method="POST">
+	<p>Flight Information</p>
+	Airline: {{ airline }}</br>
+	Flight Number: {{ flight_ID }}</br>
+	Departure Date and Time: {{ Ddate }}</br>
+	Price: {{ soldPrice }}</br>
+	===================================</br>
+
+	Card Type: <input type="text" name = "cardType" required/> </br>
+	Card Number: <input type="text" name = "cardNum" required/> </br>
+	Name on Card: <input type="text" name = "cardName" required/> </br>
+	Expiration Date: <input type="text" name = "cardExp" required/> </br>
+	<script type="text/javascript" language="javascript">
+		function GetDateTime() {
+			var origin = new Date();
+			console.log(origin);
+			var year = origin.getFullYear();
+			var month = origin.getMonth()+1;
+			console.log(month);
+			var day = origin.getDate();
+			var hour = origin.getHours();
+			var minute = origin.getMinutes();
+			var second = origin.getSeconds();
+			var result = year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
+			document.getElementById('time').value = result;
+		}
+	</script>
+	<input type="hidden" id = "time" name = "time"/></br>
+	<input type="submit" value = Confirm />
+	
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+
+You will go back to welcome page after a purchase is successfully made.</br>
+
+<a href="/customer/searchflights">Go back</a>
+</body>
+</html>

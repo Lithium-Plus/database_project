@@ -1,0 +1,63 @@
+<html>
+<head>
+</head>
+<body>
+
+<h1>View or Modify Flight</h1>
+<table>
+
+	<th>Name</th>
+	<th>email</th>
+	<th>Country</th>
+<p>passengers of flight {{flight_ID}}</p>
+{% for line in data %}
+	<tr>
+		<td>{{line['name']}}</td>
+		<td>{{line['email']}}</td>
+		<td>{{line['passport_country']}}</td>
+	</tr>
+{% endfor %}
+</table>
+<table>
+
+		<th>Name</th>
+		<th>email</th>
+		<th>rating</th>
+		<th>comment</th>
+	<p>comments of flight {{flight_ID}}, average rating for flight {{flight_ID}} : {{avg_rating}} </p>
+	{% for line in ratings %}
+		<tr>
+			<td>{{line['name']}}</td>
+			<td>{{line['email']}}</td>
+			<td>{{line['rating']}}</td>
+			<td>{{line['comment']}}</td>
+		</tr>
+	{% endfor %}
+	</table>
+<p>this flight is now {{status}}</p>
+
+<form action="/staff/modifyflights" method="POST">
+	Change flight status:
+	<select name= 'new_status' class="selectpicker form-control" >
+		{% if status == "on-time" %}
+			<option value= "delay" SELECTED>delay</option>"
+		{% endif %}
+		{% if status == "delay" %}
+			<option value= "on-time" SELECTED>on-time</option>"
+		{% endif %}
+		</select> </br>
+	<input type="submit" value = Submit />
+</form>
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<p></p>
+<a href="/staff/myflights">Logout</a>
+
+</body>
+
+
+</html>

@@ -1,0 +1,20 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/agent/viewmycommission" method="POST">
+	<h1>What date range do you want to specify?</h1>
+	Date Range: <input type="text" name = "startDate" placeholder="yyyy-mm-dd" /> to <input type="text" name = "endDate" placeholder="yyyy-mm-dd" /> </br>
+	<input type="submit" value = Search />
+</form>
+
+<P>Total amount of commission: {{total}}</P>
+<p>Total number of tickets sold: {{count}}</p>
+<p>Commission per ticket: {{avg}}</p>
+
+<a href="/agent">Go Back</a>
+
+</body>
+
+
+</html>

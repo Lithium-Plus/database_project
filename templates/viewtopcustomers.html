@@ -1,0 +1,106 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <style>
+  .chart-container {
+    width: 1000px;
+    height:600px
+}
+#chart-container,#lchart-container {float:left;} 
+  </style>
+</head>
+
+<body>
+  <a href="/agent">Go Back</a>
+  <p>Number of Tickets Bought From You in the Past 6 Months</p>
+  <div class="chart-container">
+      <canvas id="myChart" width="40" height="40"></canvas>
+  </div>
+  <p>Amount of Commission Received in the Last Year</p>
+  <div class="chart-container">
+      <canvas id="myChart2" width="40" height="40"></canvas>
+  </div>
+
+
+<script>
+  var ctx = document.getElementById("myChart");
+  var c_labels = '{{c_labels  | tojson}}';
+  console.log(c_labels);
+  c_labels = c_labels.replace("[","");
+  c_labels = c_labels.replace("]","");
+  c_labels = c_labels.split(",");
+  for (var i=0;i<c_labels.length;i++){
+    c_labels[i] = c_labels[i].replace('"',"");
+    c_labels[i] = c_labels[i].replace('"',"");
+  }
+  console.log(c_labels[0]);
+  var c_values = '{{c_values  | tojson}}';
+  c_values = c_values.replace("[","");
+  c_values = c_values.replace("]","");
+  c_values = c_values.split(",")
+  for (var i=0;i<c_values.length;i++){
+    c_values[i]=parseInt(c_values[i])
+  }
+  console.log(c_values);
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: c_labels,
+      datasets: [{
+        label: '# tickets',
+        data: c_values,
+        
+        borderWidth: 1
+      }]
+    }
+  });
+  
+
+  var ctx1 = document.getElementById("myChart2");
+  var cm_labels = '{{cm_labels  | tojson}}';
+  console.log(cm_labels);
+  cm_labels = cm_labels.replace("[","");
+  cm_labels = cm_labels.replace("]","");
+  cm_labels = cm_labels.split(",");
+  for (var i=0;i<cm_labels.length;i++){
+    cm_labels[i] = cm_labels[i].replace('"',"");
+    cm_labels[i] = cm_labels[i].replace('"',"");
+  }
+  console.log(cm_labels[0]);
+  var cm_values = '{{cm_values  | tojson}}';
+  cm_values = cm_values.replace("[","");
+  cm_values = cm_values.replace("]","");
+  cm_values = cm_values.split(",")
+  for (var i=0;i<cm_values.length;i++){
+    cm_values[i]=parseInt(cm_values[i])
+  }
+  console.log(cm_values);
+  var myChart2 = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: cm_labels,
+      datasets: [{
+        label: 'Commission',
+        data: cm_values,
+        
+        borderWidth: 1
+      }]
+    }
+  });
+  myChart.canvas.parentNode.style.height = '500px';
+  myChart.canvas.parentNode.style.width = '500px';
+  console.log(myChart.canvas.height);
+  myChart2.canvas.parentNode.style.height = '500px';
+  myChart2.canvas.parentNode.style.width = '500px';
+</script>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+</body>
+
+
+
+</html>

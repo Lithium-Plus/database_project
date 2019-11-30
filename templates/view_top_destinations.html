@@ -1,0 +1,43 @@
+<html>
+<head>
+</head>
+<body>
+
+    <table>
+    <th>City</th>
+    <th>Number_of_tickets</th>
+    
+    <p>Top destinations in last year</p>
+{% if last_year_data != None %}
+    {% for line in last_year_data %}
+        <tr>
+            <td>{{line['city']}}</td>
+            <td>{{line['number_of_tickets']}}</td>
+            
+        </tr>
+    {% endfor %}
+{% endif %}
+</table>
+<p>Top destinations in last three months</p>
+<table>
+    <th>City</th>
+    <th>Number_of_tickets</th>
+    
+
+{% if last_3month_data != None %}
+    {% for line in last_3month_data %}
+        <tr>
+            <td>{{line['city']}}</td>
+            <td>{{line['number_of_tickets']}}</td>
+            
+        </tr>
+    {% endfor %}
+{% endif %}
+</table>
+<p></p>
+<a href="/visitor">Go Back</a>
+
+</body>
+
+
+</html>

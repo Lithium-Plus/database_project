@@ -1,0 +1,34 @@
+<html>
+<head>
+</head>
+<body>
+
+<h1>View Frequent customers</h1>
+<table>
+
+	<th>name</th>
+	<th>email</th>
+	<th>number_of_tickets</th>
+<p>Most Frequent Customer of Last Year</p>
+{% for line in most %}
+	<tr>
+		<td>{{line['name']}}</td>
+		<td>{{line['email']}}</td>
+		<td>{{line['number_of_tickets']}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<p></p>
+<a href="/staff">Go Back</a>
+
+</body>
+
+
+</html>

@@ -1,0 +1,30 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/register/customer" method="POST">
+	Email: <input type="text" name = "email" required/> </br>
+	Password: <input type="password" name = "password" required/> </br>
+	Name: <input type="text" name = "name" /> </br>
+	Address Information: </br>
+	State: <input type="text" name = "state" /></br>
+	City: <input type="text" name = "city" /></br>
+	Street: <input type="text" name = "street" /></br>
+	Building Number: <input type="text" name = "building"/>
+	</br>
+	Phone: <input type="text" name = "phone" /> </br>
+	Passport Information: </br>
+	Passport Number:<input type="text" name = "ppnumber"  /></br>
+	Expiration Date: <input type="text" name = "ppexpiration" placeholder="yyyy-mm-dd" /></br>
+	Passport Country: <input type="text" name = "ppcountry"  />
+	</br>
+	Date of Birth: <input type="text" name = "dob" placeholder="yyyy-mm-dd" /></br>
+
+	<input type="submit" value = Register />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+<a href="/">Go back</a>
+</body>
+</html>

@@ -2,10 +2,9 @@
 <head>
 </head>
 <body>
-<form action="/customer/viewmyflights" method="POST">
+<form action="/agent/viewmyflights" method="POST">
 	<h1>What flights do you want to see?</h1>
 	Departure Date Range: <input type="text" name = "startDate" placeholder="yyyy-mm-dd" /> to <input type="text" name = "endDate" placeholder="yyyy-mm-dd" /> </br>
-	Destination: <input type="text" name = "destination" placeholder="arrival airport" /> </br>
 	<input type="submit" value = Search />
 </form>
 
@@ -17,6 +16,7 @@
 
 <table>
 	<th>Order #</th>
+	<th>Customer</th>
 	<th>Airline</th>
 	<th>Flight Number</th>
 	<th>Plane ID</th>
@@ -30,6 +30,7 @@
 {% for line in records %}
 	<tr>
 		<td>{{line['ID']}}</td>
+		<td>{{line['email']}}</td>
 		<td>{{line['airline']}}</td>
 		<td>{{line['flight_number']}}</td>
 		<td>{{line['plane_ID']}}</td>
@@ -42,7 +43,7 @@
 {% endfor %}
 </table>
 
-<a href="/customer">Go Back</a>
+<a href="/agent">Go Back</a>
 
 </body>
 

@@ -1,0 +1,18 @@
+<html>
+<head>
+</head>
+<body>
+{% if added == True %}
+    <p>New Airport Added</p>
+{% endif %}
+<form action="/staff/add_airport" method="POST">
+    Name: <input type="text" name = "name" required/> </br>
+    City: <input type="text" name = "city" required/> </br>
+	<input type="submit" value = Add />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+	{% endif %}
+</form>
+<a href="/staff">Go back</a>
+</body>
+</html>

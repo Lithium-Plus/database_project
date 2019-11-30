@@ -10,28 +10,16 @@
 		<option value="roundtrip">Round Trip</option>
 	</select>
 </form> -->
-<form action="/searchflights" method="POST">
-	<p></p>
-	<!-- <label><input type="radio" name="oneway" value="oneway">One-way</label>
-	<label><input type="radio" name="roundtrip" value="roundtrip">Round</label> -->
-	<input type="checkbox" name="oneway" value="oneway">One-way<br>
-	<input type="checkbox" name="roundtrip" value="roundtrip">Round Trip<br>
-	Leaving Date Range: <input type="date" name = "LstartDate" placeholder="yyyy-mm-dd" /> - <input type="date" name = "LendDate" placeholder="yyyy-mm-dd" /> </br>
-	Departure City: <input type="text" name = "Dcity" placeholder="departure city" /> </br>
-	Arrival City: <input type="text" name = "Acity" placeholder="arrival city" /> </br>
-	Returning Date Range: <input type="date" name = "RstartDate" placeholder="yyyy-mm-dd" /> - <input type="date" name = "RendDate" placeholder="yyyy-mm-dd" /> </br>
-	<input type="submit" value = Search />
-
-
-
+<form action="/customer/searchflights/results" method="POST">
 
 <style type="text/css">
 	table, th, td{
 		border: 1px solid black;
 	}
 </style>
-
+<p>Results</p>
 </br>
+
 {% if oneway==True %}
 	One-way results:
 	<table>
@@ -44,10 +32,12 @@
 		<th>Arrival Date</th>
 		<th>Arrival Airport</th>
 		<th>Arrival City</th>
+		<th>Price</th>
 		<th>Purchase</th>
 
 	{% if flights != None %}
 		{% for line in flights %}
+			
 			<tr>
 				<td>{{line['airline']}}</td>
 				<td>{{line['flight_number']}}</td>
@@ -58,13 +48,16 @@
 				<td>{{line['arrival_date_time']}}</td>
 				<td>{{line['arrival_airport']}}</td>
 				<td>{{line['a2.city']}}</td>
-				<input type="hidden" name="selectedflight" value="{{ line['flight_number'] }}" />
-				<td><input type="submit" value = Purchase /></td>
+				<td>{{line['soldPrice']}}</td>
+				{% if line['soldPrice'] != "Full" %}
+					<td><input type="checkbox" name="selectedflight" value="{{ line['flight_number'] }},{{ line['departure_date_time'] }},{{line['airline']}},{{line['soldPrice']}}"></td>
+				{% endif %}
 			</tr>
-
 		{% endfor %}
+		
 	{% endif %}
 </table>
+<input type="submit" value = Purchase />
 {% endif %}
 <p></p>
 {% if oneway==False %}
@@ -79,6 +72,7 @@
 		<th>Arrival Date</th>
 		<th>Arrival Airport</th>
 		<th>Arrival City</th>
+		<th>Price</th>
 		<th>Purchase</th>
 
 	{% if flights != None %}
@@ -93,8 +87,10 @@
 				<td>{{line['arrival_date_time']}}</td>
 				<td>{{line['arrival_airport']}}</td>
 				<td>{{line['a2.city']}}</td>
-				<input type="hidden" name="selectedflight" value="{{ line['flight_number'] }}" />
-				<td><a href="/customer/purchase">Purchase</a></td>
+				<td>{{line['soldPrice']}}</td>
+				{% if line['soldPrice'] != "Full" %}
+					<td><input type="checkbox" name="selectedflight" value="{{ line['flight_number'] }},{{ line['departure_date_time'] }},{{line['airline']}},{{line['soldPrice']}}"></td>
+				{% endif %}			
 			</tr>
 		{% endfor %}
 	{% endif %}
@@ -110,6 +106,7 @@
 		<th>Arrival Date</th>
 		<th>Arrival Airport</th>
 		<th>Arrival City</th>
+		<th>Price</th>
 		<th>Purchase</th>
 
 	{% if flights != None %}
@@ -124,20 +121,22 @@
 				<td>{{line['arrival_date_time']}}</td>
 				<td>{{line['arrival_airport']}}</td>
 				<td>{{line['a2.city']}}</td>
-				<td><a href="/customer/purchase">Purchase</a></td>
+				<td>{{line['soldPrice']}}</td>
+				{% if line['soldPrice'] != "Full" %}
+					<td><input type="checkbox" name="selectedflight" value="{{ line['flight_number'] }},{{ line['departure_date_time'] }},{{line['airline']}},{{line['soldPrice']}}"></td>
+				{% endif %}			
 			</tr>
 		{% endfor %}
 	{% endif %}
 	</table>
+<input type="submit" value = Purchase />
 {% endif %}
 
 </form>
+
 <p></p>
-{% if userType == "Customer" %}
-	<a href="/customer">Go Back</a>
-{% else %}
-	<a href="/agent">Go Back</a>
-{% endif %}
+<a href="/customer/searchflights">Go Back</a>
+
 </body>
 
 

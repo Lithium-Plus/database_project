@@ -1,0 +1,68 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <style>
+      .chart-container {
+        width: 1000px;
+        height:600px
+    }
+      </style>
+</head>
+<body>
+  <a href="/staff">Go Back</a>
+  <form action="/staff/view_revenue" method="POST">
+    <select name= 'selection' class="selectpicker form-control" >
+        <option value= "last month" SELECTED>last month</option>"
+        <option value= "last year" SELECTED>last year</option>"
+        </select> </br>
+        <input type="submit" value = Submit />
+  </form>
+    {% if last_year_data %}
+      <p>Revenue of last year</p>
+    {% else %}
+      <p>Revenue of last month</p>
+    {% endif %}
+    <div class="chart-container">
+        <canvas id="myPieChart" width="40" height="40"></canvas>
+    </div>
+  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script> -->
+
+<script>
+  var ctx = document.getElementById("myPieChart");
+  var money_year = '{{data  | tojson}}';
+  money_year = money_year.replace("[","");
+  money_year = money_year.replace("]","");
+  money_year = money_year.split(",")
+  for (var i=0;i<money_year.length;i++){
+    money_year[i]=parseInt(money_year[i])
+    console.log(money_year[i])
+  }
+
+  var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {labels: ['Non-agent', 'Agent'],
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: ['rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)'],
+            data: money_year
+        }]},
+    options : {}
+});
+  myPieChart.canvas.parentNode.style.height = "500px";
+  myPieChart.canvas.parentNode.style.width = "500px";
+  console.log(myPieChart.canvas.height);
+</script>
+</form>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+</body>
+
+
+
+</html>

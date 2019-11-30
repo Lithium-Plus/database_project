@@ -2,14 +2,15 @@
 <head>
 </head>
 <body>
-<form action="/registerAuth" method="POST">
-	<input type="text" name = "username" placeholder="username" required/> </br>
-	<input type="password" name = "password" placeholder="password" required/></br>
-	<input type="submit" value = Register />
-	{% if error %}
-		<p class="error"><strong>Error:</strong> {{error}}</p>
-	{% endif %}
+<form action="/registerselect" >
+	I want to registor as a:<br/>
+	<a href="/register/customer">Customer</a>
+	<a href="/register/agent">Booking Agent</a>
+	<a href="/register/staff">Airline Staff</a>
 </form>
+{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
 <a href="/">Go back</a>
 </body>
 </html>

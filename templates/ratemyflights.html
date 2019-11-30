@@ -1,0 +1,41 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/customer/ratemyflights" method="POST">
+	<h1>What flight do you want to rate?</h1>
+	Airline: <select name= 'airline' class="selectpicker form-control" >
+			{% for airline in airline_list %}
+			<option value= "{{airline}}" SELECTED>{{airline}}</option>"
+			{% endfor %}
+			</select> </br>
+	Flight Number: <select name= 'flight_number' class="selectpicker form-control" >
+			{% for flight_num in flight_num_list %}
+			<option value= "{{flight_num}}" SELECTED>{{flight_num}}</option>"
+			{% endfor %}
+			</select> </br>
+	Departure time: <select name= 'Ddate' class="selectpicker form-control" >
+			{% for Ddate in Ddate_list %}
+			<option value= "{{Ddate}}" SELECTED>{{Ddate}}</option>"
+			{% endfor %}
+			</select> </br>
+	Rating: <input type="text" name = "rating" placeholder="1-10" /></br>
+	Comments: <input type="text" name = "comments" /> </br>
+	<input type="submit" value = Submit />
+</form>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+{% if message %}
+<p class="error"><strong>Message:</strong> {{message}}</p>
+{% endif %}
+<p></p>
+<a href="/customer">Go Back</a>
+
+</body>
+
+
+</html>

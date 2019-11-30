@@ -1,0 +1,96 @@
+<html>
+<head>
+</head>
+<body>
+<form action="/staff/myflights" method="POST">
+	Searching flights:<br/>
+    Departure Date Range: <input type="date" name = "DstartDate" placeholder="yyyy-mm-dd" /> - <input type="date" name = "DendDate" placeholder="yyyy-mm-dd" /> </br>
+    
+    Departure City: <select name= 'Dcity' class="selectpicker form-control" >
+                    {% for city in city_list %}
+                    <option value= "{{city}}" SELECTED>{{city}}</option>"
+                    {% endfor %}
+                    </select> </br>
+    Arrival City: <select name= 'Acity' class="selectpicker form-control" >
+        {% for city in city_list %}
+        <option value= "{{city}}" SELECTED>{{city}}</option>"
+        {% endfor %}
+		</select> </br>
+	<input type="submit" value = Search />
+
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+{% if search==False %}
+	<table>
+
+		<th>Airline</th>
+		<th>Flight Number</th>
+		<th>Plane ID</th>
+		<th>Departure Date</th>
+		<th>Departure Airport</th>
+		<th>Arrival Date</th>
+		<th>Arrival Airport</th>
+		<th>Status</th>
+		<th>Base Price</th>
+		<th>View/Modify</th>
+	<p>Flights in the next 30 days</p>
+	{% for line in flights %}
+		<tr>
+
+			<td>{{line['airline']}}</td>
+			<td>{{line['flight_number']}}</td>
+			<td>{{line['plane_ID']}}</td>
+			<td>{{line['departure_date_time']}}</td>
+			<td>{{line['departure_airport']}}</td>
+			<td>{{line['arrival_date_time']}}</td>
+			<td>{{line['arrival_airport']}}</td>
+			<td>{{line['status']}}</td>
+			<td>{{line['base_price']}}</td>
+			<td><input type="checkbox" name="selectedflight" value="{{  line['flight_number'] }},{{ line['departure_date_time'] }},{{line['airline']}},{{line['status']}}"></td>
+		</tr>
+	{% endfor %}
+	</table>
+	<input type="submit" value = View/Modify />
+{% endif %}
+{% if search==True %}
+<table>
+
+	<th>Airline</th>
+	<th>Flight Number</th>
+	<th>Plane ID</th>
+	<th>Departure Date</th>
+	<th>Departure Airport</th>
+	<th>Arrival Date</th>
+	<th>Arrival Airport</th>
+	<th>Status</th>
+	<th>Base Price</th>
+<p>Search Results</p>
+{% for line in flights %}
+	<tr>
+		<td>{{line['airline']}}</td>
+		<td>{{line['flight_number']}}</td>
+		<td>{{line['plane_ID']}}</td>
+		<td>{{line['departure_date_time']}}</td>
+		<td>{{line['departure_airport']}}</td>
+		<td>{{line['arrival_date_time']}}</td>
+		<td>{{line['arrival_airport']}}</td>
+		<td>{{line['status']}}</td>
+		<td>{{line['base_price']}}</td>
+		<td><input type="checkbox" name="selectedflight" value="{{ line['flight_number'] }},{{ line['departure_date_time'] }},{{line['airline']}},{{line['status']}}"></td>
+	</tr>
+{% endfor %}
+</table>
+<input type="submit" value = View/Modify />
+{% endif %}
+</form>
+<p></p>>
+<a href="/staff">Go Back</a>
+
+</body>
+
+
+</html>

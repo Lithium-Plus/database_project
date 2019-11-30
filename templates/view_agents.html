@@ -1,0 +1,65 @@
+<html>
+<head>
+</head>
+<body>
+
+<h1>View Agents</h1>
+<table>
+
+	<th>ID</th>
+	<th>email</th>
+	<th>sales</th>
+<p>Top 5 agents of last month</p>
+{% for line in last_month %}
+	<tr>
+		<td>{{line['booking_agent_id']}}</td>
+		<td>{{line['email']}}</td>
+		<td>{{line['sale']}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+<table>
+
+        <th>ID</th>
+        <th>email</th>
+        <th>sales</th>
+    <p>Top 5 agents of last year</p>
+    {% for line in last_year %}
+        <tr>
+            <td>{{line['booking_agent_id']}}</td>
+            <td>{{line['email']}}</td>
+            <td>{{line['sale']}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<table>
+
+        <th>ID</th>
+        <th>email</th>
+        <th>commission</th>
+    <p>Top 5 agents by commission of last year</p>
+    {% for line in commission %}
+        <tr>
+            <td>{{line['booking_agent_id']}}</td>
+            <td>{{line['email']}}</td>
+            <td>{{line['commission']}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<p></p>
+<a href="/staff">Go Back</a>
+
+</body>
+
+
+</html>

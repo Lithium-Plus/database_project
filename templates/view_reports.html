@@ -1,0 +1,88 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <style>
+      .chart-container {
+        width: 1000px;
+        height:600px
+    }
+      </style>
+</head>
+
+<body>
+  <a href="/staff">Go Back</a>
+  <form action="/staff/view_reports" method="POST">
+    Select date range:
+    <input type="text" name = "sDate" placeholder="yyyy-mm-dd" />
+    -
+    <input type="text" name = "eDate" placeholder="yyyy-mm-dd" /></br>
+    <input type="submit" value = Submit /></br>
+    {% if year_total %}
+      <p>Total amount spent in the past year: {{year_total}}</p>
+    {% else %}
+      <p>Total amount spent in the past year: NaN</p>
+    {% endif %}
+    {% if last_month_total %}
+    <p>Total amount spent in the past year: {{last_month_total}}</p>
+  {% else %}
+    <p>Total amount spent in the past year: NaN</p>
+  {% endif %}
+    {% if total %}
+      <p>Total amount spent in your specified period: {{total}}</p>
+    {% else %}
+      <p>Total amount spent in this period: 0.00</p>
+    {% endif %}
+
+    <div class="chart-container">
+        <canvas id="myChart" width="40" height="40"></canvas>
+    </div>
+  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script> -->
+
+<script>
+  var ctx = document.getElementById("myChart");
+  var month = '{{month  | tojson}}';
+  console.log(month);
+  month = month.replace("[","");
+  month = month.replace("]","");
+  month = month.split(",");
+  for (var i=0;i<month.length;i++){
+    month[i] = month[i].replace('"',"");
+    month[i] = month[i].replace('"',"");
+  }
+  console.log(month[0]);
+  var money = '{{money  | tojson}}';
+  money = money.replace("[","");
+  money = money.replace("]","");
+  money = money.split(",")
+  for (var i=0;i<money.length;i++){
+    money[i]=parseInt(money[i])
+    console.log(money[i])
+  }
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: month,
+      datasets: [{
+        label: 'Number of Tickets',
+        data: money,
+        
+        borderWidth: 1
+      }]
+    }
+  });
+  myChart.canvas.parentNode.style.height = "500px";
+  myChart.canvas.parentNode.style.width = "500px";
+  console.log(myChart.canvas.height);
+</script>
+</form>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+
+</body>
+
+
+
+</html>
