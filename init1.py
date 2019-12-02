@@ -666,13 +666,14 @@ def modifyflights():
 	query_rating = 'SELECT r.comment,r.rating,c.name,r.email FROM rate as r,customer as c WHERE r.flight_number = "%s" AND  r.departure_date_time = "%s" AND r.airline = "%s"  AND r.email = c.email'
 	cursor.execute(query_rating % (flight_ID,Ddate,airline))
 	ratings = cursor.fetchall()
-	if ratings != None:
+	# app.logger.warning(len(ratings))
+	if len(ratings) > 0 :
 		score = []
 		for rating in ratings:
 			score.append(rating['rating'])
 		avg_rating = sum(score)/len(score)
 	else:
-		avg_rating = 'nan'
+		avg_rating = False
 	if request.method == 'POST':
 		new_status = request.form.get("new_status")
 		update_query = 'UPDATE flight SET status = "%s" WHERE flight_number = "%s" AND  departure_date_time = "%s" AND airline = "%s";'
@@ -702,6 +703,50 @@ def add_airplane():
 	else:
 		return render_template('add_airplane.html',added=False)
 
+
+
+@app.route('/staff/add_flight', methods=['GET','POST'])
+def add_flight():
+	cursor = conn.cursor()
+	username = session['username']
+	cursor = conn.cursor()
+	query1 = 'SELECT airline FROM staff WHERE email = "%s"'
+	cursor.execute(query1 %(username))
+	airline_name = cursor.fetchall()[0]['airline'] 
+	query_airport = 'SELECT name FROM airport'
+	cursor.execute(query_airport)
+	airport_list = cursor.fetchall()
+	airport_list = [i['name'] for i in airport_list]
+	query_plane_id = 'SELECT ID FROM airplane WHERE airline = "%s"'
+	cursor.execute(query_plane_id % (airline_name))
+	id_list = cursor.fetchall()
+	id_list = [i['ID'] for i in id_list]
+	
+
+
+	if request.method == 'POST':
+		flight_number = request.form.get("flight_number")
+		base_price = request.form.get('base_price')
+		DDate = request.form.get('DDate')
+		ADate = request.form.get('ADate')
+		DAirport = request.form.get('DAirport')
+		AAirport = request.form.get('AAirport')
+		plane_ID = request.form.get('plane_ID')
+		status =  request.form.get('status')
+		add_query = 'INSERT INTO flight(flight_number,base_price,departure_date_time,arrival_date_time,airline,departure_airport,arrival_airport,plane_ID,`status`) VALUES ("%s","%s","%s","%s","%s","%s","%s","%s","%s")'
+		cursor.execute(add_query % (flight_number,base_price,DDate,ADate,airline_name,DAirport,AAirport,plane_ID,status))
+		conn.commit()
+		curr_date = str(datetime.date.today())
+		day30 = str(datetime.date.today()+datetime.timedelta(days=30))
+		default_query = 'SELECT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
+		cursor.execute(default_query %(airline_name,curr_date,day30))
+		data_default = cursor.fetchall()
+		cursor.close()
+		return render_template('add_flight.html',added=True,flights=data_default)
+	else:
+		return render_template('add_flight.html',added=False,airport_list=airport_list,id_list=id_list)
+
+
 @app.route('/staff/add_airport', methods=['GET','POST'])
 def add_airport():
 	cursor = conn.cursor()
@@ -715,6 +760,7 @@ def add_airport():
 		return render_template('add_airport.html',added=True)
 	else:
 		return render_template('add_airport.html',added=False)
+
 
 @app.route('/staff/view_agents', methods=['GET','POST'])
 def view_agents():
@@ -745,7 +791,12 @@ def view_customers():
 	query_most = 'SELECT c.email,c.name,count(*) AS number_of_tickets FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY c.email ORDER BY number_of_tickets DESC'
 	cursor.execute(query_most % (username,lastyear,today))
 	most = cursor.fetchall()[:1]
-	return render_template('view_customer.html',most = most)
+	# app.logger.warning(most)
+	customer = most[0]['name']
+	query = 'SELECT t.flight_number,t.departure_date_time FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE c.name = "%s" AND t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND t.departure_date_time <= CURDATE()' 
+	cursor.execute(query %(customer,username))
+	data = cursor.fetchall()
+	return render_template('view_customer.html',most = most,data=data)
 
 @app.route('/staff/view_reports', methods=['GET','POST'])
 def view_reports():

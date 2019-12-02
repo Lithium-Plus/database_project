@@ -19,6 +19,20 @@
 {% endfor %}
 </table>
 
+<table>
+
+	<th>flight_number</th>
+	<th>departure_date_time</th>
+	
+<p>The flight this customer has taken</p>
+{% for line in data %}
+	<tr>
+		<td>{{line['flight_number']}}</td>
+		<td>{{line['departure_date_time']}}</td>
+	</tr>
+{% endfor %}
+</table>
+
 <style type="text/css">
 	table, th, td{
 		border: 1px solid black;

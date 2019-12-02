@@ -1,0 +1,74 @@
+<html>
+<head>
+</head>
+<body>
+{% if added == True %}
+    <p>New Airport Added</p>
+    <p>Flights for the next 30 days</p>
+    <table>
+
+		<th>Airline</th>
+		<th>Flight Number</th>
+		<th>Plane ID</th>
+		<th>Departure Date</th>
+		<th>Departure Airport</th>
+		<th>Arrival Date</th>
+		<th>Arrival Airport</th>
+		<th>Status</th>
+		<th>Base Price</th>
+
+	<p>Flights in the next 30 days</p>
+	{% for line in flights %}
+		<tr>
+
+			<td>{{line['airline']}}</td>
+			<td>{{line['flight_number']}}</td>
+			<td>{{line['plane_ID']}}</td>
+			<td>{{line['departure_date_time']}}</td>
+			<td>{{line['departure_airport']}}</td>
+			<td>{{line['arrival_date_time']}}</td>
+			<td>{{line['arrival_airport']}}</td>
+			<td>{{line['status']}}</td>
+			<td>{{line['base_price']}}</td>
+			
+		</tr>
+	{% endfor %}
+	</table>
+{% else %}
+<form action="/staff/add_flight" method="POST">
+    Flight_Number: <input type="text" name = "flight_number" required/> </br>
+    Base_Price: <input type="number" name = "base_price" required/> </br>
+    Departure Date: <input type="text" name = "DDate" placeholder="yyyy-mm-dd HH:MM:SS" />  </br>
+    Arrival Date: <input type="text" name = "ADate" placeholder="yyyy-mm-dd HH:MM:SS" /> </br>
+    Departure Airport: <select name= 'DAirport' class="selectpicker form-control" >
+        {% for airport in airport_list %}
+        <option value= "{{airport}}" SELECTED>{{airport}}</option>"
+        {% endfor %}
+        </select> </br>
+    Arrival Airport: <select name= 'AAirport' class="selectpicker form-control" >
+        {% for airport in airport_list %}
+        <option value= "{{airport}}" SELECTED>{{airport}}</option>"
+        {% endfor %}
+    </select> </br>
+
+    Plane ID: <select name= 'plane_ID' class="selectpicker form-control" >
+        {% for id in id_list %}
+        <option value= "{{id}}" SELECTED>{{id}}</option>"
+        {% endfor %}
+    </select> </br>
+
+
+    Status: <select name= 'status' class="selectpicker form-control" >
+			<option value= "delay" SELECTED>delay</option>"
+			<option value= "on-time" SELECTED>on-time</option>"
+		</select> </br>
+    
+	<input type="submit" value = Add />
+	{% if error %}
+		<p class="error"><strong>Error:</strong> {{error}}</p>
+    {% endif %}
+</form>
+{% endif %}
+<a href="/staff">Go back</a>
+</body>
+</html>
