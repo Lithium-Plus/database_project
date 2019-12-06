@@ -18,6 +18,7 @@
 	</tr>
 {% endfor %}
 </table>
+{% if avg_rating %}
 <table>
 
 		<th>Name</th>
@@ -34,6 +35,9 @@
 		</tr>
 	{% endfor %}
 	</table>
+{% else %}
+<p> currently no comment on this flight </p>
+{% endif %}
 <p>this flight is now {{status}}</p>
 
 <form action="/staff/modifyflights" method="POST">
@@ -55,7 +59,7 @@
 </style>
 
 <p></p>
-<a href="/staff/myflights">Logout</a>
+<a href="/staff/myflights">Go Back</a>
 
 </body>
 

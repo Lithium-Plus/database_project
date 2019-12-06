@@ -18,7 +18,32 @@
 	</tr>
 {% endfor %}
 </table>
+<form action="view_customers" method="POST">
+    <p></p>
+    
+    Select a customer to view his/her filghts: <select name= 'customer' class="selectpicker form-control" >
+                    {% for customer in customer_list %}
+                    <option value= "{{customer}}" SELECTED>{{customer}}</option>"
+                    {% endfor %}
+                    </select> </br>
+    <input type="submit" value = Search />
 
+</form>
+{% if data %}
+<table>
+
+	<th>flight_number</th>
+	<th>departure_date_time</th>
+	
+<p>The flight {{cust}} has taken</p>
+{% for line in data %}
+	<tr>
+		<td>{{line['flight_number']}}</td>
+		<td>{{line['departure_date_time']}}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
 <style type="text/css">
 	table, th, td{
 		border: 1px solid black;
