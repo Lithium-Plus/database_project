@@ -635,7 +635,7 @@ def viewflights():
 	curr_date = str(datetime.date.today())
 	day30 = str(datetime.date.today()+datetime.timedelta(days=30))
 	oneway = True
-	default_query = 'SELECT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
+	default_query = 'SELECT DISTINCT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
 	cursor.execute(default_query %(airline_name,curr_date,day30))
 	data_default = cursor.fetchall()
 	city_query = "SELECT DISTINCT city FROM airport;"
@@ -651,7 +651,7 @@ def viewflights():
 		LendDate = request.form["DendDate"]
 		Dcity = request.form["Dcity"]
 		Acity = request.form["Acity"]
-		query = 'SELECT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE a1.city = "%s" AND a2.city = "%s" AND Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
+		query = 'SELECT DISTINCT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE a1.city = "%s" AND a2.city = "%s" AND Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
 		cursor.execute(query % (Dcity, Acity,airline_name,LstartDate, LendDate ))
 		data = cursor.fetchall()
 		cursor.close()
@@ -666,10 +666,10 @@ def modifyflights():
 	Ddate = thisflight[1]
 	airline = thisflight[2]
 	status = thisflight[3].strip()
-	query = 'SELECT c.name,c.email,c.passport_country  FROM ticket AS t,customer as c WHERE t.flight_number = "%s" AND  t.departure_date_time = "%s" AND t.airline = "%s" AND t.email = c.email' 
+	query = 'SELECT DISTINCT c.name,c.email,c.passport_country  FROM ticket AS t,customer as c WHERE t.flight_number = "%s" AND  t.departure_date_time = "%s" AND t.airline = "%s" AND t.email = c.email' 
 	cursor.execute(query % (flight_ID,Ddate,airline))
 	data = cursor.fetchall()
-	query_rating = 'SELECT r.comment,r.rating,c.name,r.email FROM rate as r,customer as c WHERE r.flight_number = "%s" AND  r.departure_date_time = "%s" AND r.airline = "%s"  AND r.email = c.email'
+	query_rating = 'SELECT DISTINCT r.comment,r.rating,c.name,r.email FROM rate as r,customer as c WHERE r.flight_number = "%s" AND  r.departure_date_time = "%s" AND r.airline = "%s"  AND r.email = c.email'
 	cursor.execute(query_rating % (flight_ID,Ddate,airline))
 	ratings = cursor.fetchall()
 	# app.logger.warning(len(ratings))
@@ -719,17 +719,17 @@ def add_flight():
 	query1 = 'SELECT airline FROM staff WHERE email = "%s"'
 	cursor.execute(query1 %(username))
 	airline_name = cursor.fetchall()[0]['airline'] 
-	query_airport = 'SELECT name FROM airport'
+	query_airport = 'SELECT DISTINCT name FROM airport'
 	cursor.execute(query_airport)
 	airport_list = cursor.fetchall()
 	airport_list = [i['name'] for i in airport_list]
-	query_plane_id = 'SELECT ID FROM airplane WHERE airline = "%s"'
+	query_plane_id = 'SELECT DISTINCT ID FROM airplane WHERE airline = "%s"'
 	cursor.execute(query_plane_id % (airline_name))
 	id_list = cursor.fetchall()
 	id_list = [i['ID'] for i in id_list]
 	curr_date = str(datetime.date.today())
 	day30 = str(datetime.date.today()+datetime.timedelta(days=30))
-	default_query = 'SELECT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
+	default_query = 'SELECT DISTINCT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
 	cursor.execute(default_query %(airline_name,curr_date,day30))
 	data_default = cursor.fetchall()
 
@@ -746,7 +746,7 @@ def add_flight():
 		add_query = 'INSERT INTO flight(flight_number,base_price,departure_date_time,arrival_date_time,airline,departure_airport,arrival_airport,plane_ID,`status`) VALUES ("%s","%s","%s","%s","%s","%s","%s","%s","%s")'
 		cursor.execute(add_query % (flight_number,base_price,DDate,ADate,airline_name,DAirport,AAirport,plane_ID,status))
 		conn.commit()
-		default_query = 'SELECT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
+		default_query = 'SELECT DISTINCT f.base_price, f.status, Airplane.number_of_seats, f.airline, f.flight_number,f.plane_ID, f.departure_date_time, f.departure_airport, a1.city, f.arrival_date_time, f.arrival_airport, a2.city FROM Flight AS f, Airplane , Airport AS a1, Airport AS a2 WHERE Airplane.ID=f.plane_ID AND f.departure_airport=a1.name AND f.arrival_airport=a2.name AND  f.airline = "%s" and f.departure_date_time between "%s" and "%s"' 
 		cursor.execute(default_query %(airline_name,curr_date,day30))
 		data_default = cursor.fetchall()
 		cursor.close()
@@ -779,13 +779,13 @@ def view_agents():
 	# query = 'SELECT email,booking_agent_id FROM agent'
 	# cursor.execute(query)
 	# data = cursor.fetchall()
-	query_month =  'SELECT a.email,a.booking_agent_id,count(*) AS sale FROM agent AS a, purchase AS p WHERE p.booking_agent_ID = a.booking_agent_ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.booking_agent_ID,a.email ORDER BY sale DESC'
+	query_month =  'SELECT a.email,a.booking_agent_id,count(DISTINCT p.ID) AS sale FROM agent AS a, purchase AS p WHERE p.booking_agent_ID = a.booking_agent_ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.booking_agent_ID,a.email ORDER BY sale DESC'
 	cursor.execute(query_month % (lastmonth,today))
 	last_month = cursor.fetchall()[:5]
-	query_year =  'SELECT a.email,a.booking_agent_id,count(*) AS sale FROM agent AS a, purchase AS p WHERE p.booking_agent_ID = a.booking_agent_ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.booking_agent_ID,a.email ORDER BY sale DESC'
+	query_year =  'SELECT a.email,a.booking_agent_id,count(DISTINCT p.ID) AS sale FROM agent AS a, purchase AS p WHERE p.booking_agent_ID = a.booking_agent_ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.booking_agent_ID,a.email ORDER BY sale DESC'
 	cursor.execute(query_year % (lastyear,today))
 	last_year = cursor.fetchall()[:5]
-	query_commission =  'SELECT a.email,a.booking_agent_id,0.1*SUM(t.sold_price) AS commission FROM agent AS a, purchase AS p,ticket as t WHERE t.ID = p.ID AND p.booking_agent_ID = a.booking_agent_ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.booking_agent_ID,a.email ORDER BY commission DESC'
+	query_commission =  'SELECT DISTINCT a.email,a.booking_agent_id,t.ID,0.1*SUM(t.sold_price) AS commission FROM agent AS a, purchase AS p,ticket as t WHERE t.ID = p.ID AND p.booking_agent_ID = a.booking_agent_ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.booking_agent_ID,a.email ORDER BY commission DESC'
 	cursor.execute(query_commission % (lastyear,today))
 	commission = cursor.fetchall()[:5]
 	return render_template('view_agents.html',last_month = last_month,last_year = last_year,commission= commission)
@@ -796,7 +796,7 @@ def view_customers():
 	cursor = conn.cursor()
 	today =  datetime.date.today()
 	lastyear = datetime.date.today() - relativedelta(months=12)
-	query_most = 'SELECT c.email,c.name,count(*) AS number_of_tickets FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY c.email ORDER BY number_of_tickets DESC'
+	query_most = 'SELECT DISTINCT c.email,c.name,COUNT(DISTINCT t.ID) AS number_of_tickets FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY c.email ORDER BY number_of_tickets DESC'
 	cursor.execute(query_most % (username,lastyear,today))
 	most = cursor.fetchall()[:1]
 	query_cust = 'SELECT DISTINCT c.name FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email'
@@ -806,7 +806,7 @@ def view_customers():
 	customer_list = [i['name'] for i in customer_list]
 	if request.method == 'POST':
 		customer = request.form.get("customer")
-		query = 'SELECT t.flight_number,t.departure_date_time FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE c.name = "%s" AND t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND t.departure_date_time <= CURDATE()' 
+		query = 'SELECT DISTINCT t.flight_number,t.departure_date_time FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE c.name = "%s" AND t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND t.departure_date_time <= CURDATE()' 
 		
 		cursor.execute(query %(customer,username))
 		data = cursor.fetchall()
@@ -821,10 +821,10 @@ def view_reports():
 	labels = []
 	label_temp = []
 	values = []
-	today = datetime.date.today() 
+	today = datetime.date.today() + relativedelta(months=1)
 	last_year = today - relativedelta(months=12)
 	last_month = today - relativedelta(months=1)
-	query = 'SELECT YEAR(p.purchase_date_time) AS year, MONTH(p.purchase_date_time) AS month,COUNT(*) AS month_total FROM Purchase AS p, Ticket AS t,staff as s WHERE p.ID=t.ID AND s.email="%s" AND s.airline = t.airline AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY YEAR(p.purchase_date_time),MONTH(p.purchase_date_time)'
+	query = 'SELECT YEAR(p.purchase_date_time) AS year, MONTH(p.purchase_date_time) AS month,COUNT(DISTINCT t.ID) AS month_total FROM Purchase AS p, Ticket AS t,staff as s WHERE p.ID=t.ID AND s.email="%s" AND s.airline = t.airline AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY YEAR(p.purchase_date_time),MONTH(p.purchase_date_time)'
 	cursor.execute(query % (email, last_year,today))
 	data = cursor.fetchall()
 	d = last_year
