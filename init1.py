@@ -4,6 +4,7 @@ import pymysql.cursors
 import datetime
 
 from dateutil.relativedelta import relativedelta
+from pymysql import NULL
 
 
 #Initialize the app from Flask
@@ -654,8 +655,7 @@ def viewflights():
 		cursor.execute(query % (Dcity, Acity,airline_name,LstartDate, LendDate ))
 		data = cursor.fetchall()
 		cursor.close()
-		return render_template('myflights.html', flights=data,city_list= city_list,search=True)
-		
+		return render_template('myflights.html', userType=session["userType"],flights=data,city_list= city_list,search=True)
 	else:
 		return render_template('myflights.html',userType=session["userType"],flights=data_default,city_list=city_list,search=False)
 @app.route('/staff/modifyflights', methods=['GET','POST'])
@@ -805,12 +805,9 @@ def view_customers():
 	customer_list = cursor.fetchall()
 	customer_list = [i['name'] for i in customer_list]
 	if request.method == 'POST':
-		print('1')
-		app.logger.warning('1')
 		customer = request.form.get("customer")
-		app.logger.warning('2')
 		query = 'SELECT t.flight_number,t.departure_date_time FROM customer AS c, ticket AS t,airline AS a,staff AS s,purchase as p WHERE c.name = "%s" AND t.airline = a.name AND s.email = "%s" ANd s.airline = a.name AND t.email = c.email AND t.ID = p.ID AND t.departure_date_time <= CURDATE()' 
-		app.logger.warning('3')
+		
 		cursor.execute(query %(customer,username))
 		data = cursor.fetchall()
 		return render_template('view_customer.html',most = most,data=data,customer_list=customer_list,cust=customer)
@@ -824,7 +821,7 @@ def view_reports():
 	labels = []
 	label_temp = []
 	values = []
-	today = datetime.date.today() + relativedelta(months=1)
+	today = datetime.date.today() 
 	last_year = today - relativedelta(months=12)
 	last_month = today - relativedelta(months=1)
 	query = 'SELECT YEAR(p.purchase_date_time) AS year, MONTH(p.purchase_date_time) AS month,COUNT(*) AS month_total FROM Purchase AS p, Ticket AS t,staff as s WHERE p.ID=t.ID AND s.email="%s" AND s.airline = t.airline AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY YEAR(p.purchase_date_time),MONTH(p.purchase_date_time)'
@@ -884,7 +881,7 @@ def view_revenue():
 	email = session["username"]
 	last_year_values = [0,0]
 	last_month_values = [0,0]
-	today = datetime.date.today() + relativedelta(months=1)
+	today = datetime.date.today()
 	last_year = today - relativedelta(months=12)
 	last_month = today - relativedelta(months=1)
 	query = 'SELECT p.booking_agent_id,SUM(t.sold_price) AS total FROM Purchase AS p, Ticket AS t,staff as s WHERE p.ID=t.ID AND s.email="%s" AND s.airline = t.airline AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY booking_agent_id'
@@ -892,23 +889,20 @@ def view_revenue():
 	last_year_data = cursor.fetchall()
 	if len(last_year_data) != 0:
 		for line in last_year_data:
-			if line['booking_agent_id']=='Null':
+			if line['booking_agent_id'] is None:
 				last_year_values[0] += float(line['total'])
 			else:
 				last_year_values[1] += float(line['total'])
-	app.logger.warning(last_year_values)
 	cursor.execute(query % (email, last_month,today))
 	last_month_data = cursor.fetchall()
 	if len(last_month_data) != 0:
 		for line in last_month_data:
-			if line['booking_agent_id']=='Null':
+			if line['booking_agent_id'] is None:
 				last_month_values[0] += float(line['total'])
 			else:
 				last_month_values[1] += float(line['total'])
 	if request.method == "POST":
-		app.logger.warning('here')
 		selection = request.form["selection"]
-		app.logger.warning('selection')
 		if selection == 'last month':
 			return render_template('view_revenue.html',data=last_month_values,last_year_data=False)
 		else:
@@ -923,7 +917,7 @@ def view_destinations():
 	today = datetime.date.today() + relativedelta(months=1)
 	last_year = today - relativedelta(months=12)
 	last_3month = today - relativedelta(months=3)
-	query = 'SELECT a.city,COUNT(*) AS number_of_tickets FROM Purchase AS p, Ticket AS t,staff as s,airport as a,flight as f WHERE t.flight_number = f.flight_number AND f.departure_date_time = t.departure_date_time AND f.arrival_airport = a.name AND p.ID=t.ID AND s.email="%s" AND s.airline = t.airline AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.city'
+	query = 'SELECT a.city,COUNT(*) AS number_of_tickets FROM Purchase AS p, Ticket AS t,staff as s,airport as a,flight as f WHERE t.flight_number = f.flight_number AND f.departure_date_time = t.departure_date_time AND f.arrival_airport = a.name AND p.ID=t.ID AND s.email="%s" AND s.airline = t.airline AND p.purchase_date_time BETWEEN "%s" AND "%s" GROUP BY a.city ORDER BY number_of_tickets DESC'
 	cursor.execute(query % (email, last_year,today))
 	last_year_data = cursor.fetchall()[:3]
 	cursor.execute(query % (email, last_3month,today))
